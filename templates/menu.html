@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Form Gruas Cranes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap">
+</head>
+
+<body>
+    <div class="d-flex flex-column justify-content-center align-items-center" style="width: 100vw;height: 100vh;"><img src="{{ url_for('static', filename='assets/img/image1.png') }}" alt="Logo" width="160" height="89">
+        <h1>Menú de Administración</h1>
+        <form class="d-flex flex-column justify-content-center align-items-center" style="width: 100%;" action="url_for('menu')">
+            <div class="row gy-3" style="width: 100%;">
+                <div class="col-sm-12 col-md-6"><button class="btn btn-primary" type="submit" style="width: 100%;background: var(--bs-success);font-family: Roboto, sans-serif;" value="Trabajadores">Gestión Trabajadores</button></div>
+                <div class="col-sm-12 col-md-6"><button class="btn btn-primary" type="submit" style="width: 100%;background: var(--bs-success);font-family: Roboto, sans-serif;" value="Clientes">Gestión Clientes</button></div>
+                <div class="col-sm-12 col-md-6"><button class="btn btn-primary" type="submit" style="width: 100%;background: var(--bs-success);font-family: Roboto, sans-serif;" value="Labores">Gestión Labores</button></div>
+                <div class="col-sm-12 col-md-6"><button class="btn btn-primary" type="submit" style="width: 100%;background: var(--bs-success);font-family: Roboto, sans-serif;" value="Equipos">Gestión Equipos</button></div>
+                <div class="col-sm-12 col-md-6"><button class="btn btn-primary" type="submit" style="width: 100%;background: var(--bs-success);font-family: Roboto, sans-serif;" value="Sueldos">Administración de sueldos</button></div>
+                <div class="col-sm-12 col-md-6"><button class="btn btn-primary" type="submit" style="width: 100%;background: var(--bs-success);font-family: Roboto, sans-serif;" value="Informe">Generación de informe</button></div>
+            </div>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>
