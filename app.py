@@ -38,7 +38,7 @@ def menu():
 
 @app.route('/crud', methods=['POST'])
 def crud():
-    boton = request.form.get('submit')
+    boton = request.form.get('accion')
     if boton in CRUD_CONFIG:
         return render_template('CRUD.html', config=CRUD_CONFIG[boton])
     elif boton == 'Administración de sueldos':
