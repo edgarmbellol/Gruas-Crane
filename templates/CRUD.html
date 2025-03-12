@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ config.titulo }} - Grúas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #307e48;
+            --primary-hover: #256537;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .form-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(48, 126, 72, 0.1);
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .header-title {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .header-title i {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-select, .form-control {
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            border-color: #ddd;
+        }
+
+        .form-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: none !important;
+            padding-right: 40px;
+        }
+        
+        .form-select:focus, .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(48, 126, 72, 0.25);
+        }
+        
+        .btn-submit {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            min-width: 200px;
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(48, 126, 72, 0.2);
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            right: 10px;
+            top: 40px;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center header-title">
+                <i class="fas fa-users"></i>
+                {{ config.titulo }}
+            </h2>
+
+            <!-- Sección Crear -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="form-label">Crear nuevo registro</label>
+                        <input type="text" class="form-control" id="nombreNuevo" placeholder="Ingrese nombre">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="form-group mt-3" id="jornadaNuevaGroup" style="display: none;">
+                        <label class="form-label">Jornada</label>
+                        <select class="form-select" id="jornadaNueva">
+                            <option value="" selected disabled>Seleccione una jornada</option>
+                            <option value="Diurno">Diurno</option>
+                            <option value="Nocturno">Nocturno</option>
+                        </select>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="form-group mt-3" id="valorNuevoGroup" style="display: none;">
+                        <label class="form-label">Valor</label>
+                        <input type="text" class="form-control" id="valorNuevo" placeholder="$ 0" inputmode="numeric">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button onclick="crearRegistro()" class="btn btn-submit">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Crear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección Modificar -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="form-label">Modificar registro</label>
+                        <select class="form-select" id="selectModificar">
+                            <option value="" selected disabled>Seleccione un registro</option>
+                        </select>
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="text" class="form-control" id="nombreModificar" placeholder="Nuevo nombre">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="form-group mt-3" id="jornadaModificarGroup" style="display: none;">
+                        <label class="form-label">Jornada</label>
+                        <select class="form-select" id="jornadaModificar">
+                            <option value="" selected disabled>Seleccione una jornada</option>
+                            <option value="Diurno">Diurno</option>
+                            <option value="Nocturno">Nocturno</option>
+                        </select>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="form-group mt-3" id="valorModificarGroup" style="display: none;">
+                        <label class="form-label">Valor</label>
+                        <input type="text" class="form-control" id="valorModificar" placeholder="$ 0" inputmode="numeric">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button onclick="actualizarRegistro()" class="btn btn-submit">
+                        <i class="fas fa-sync-alt me-2"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección Eliminar -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="form-label">Eliminar registro</label>
+                        <select class="form-select" id="selectEliminar">
+                            <option value="" selected disabled>Seleccione un registro</option>
+                        </select>
+                        <i class="fas fa-user-minus"></i>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button onclick="eliminarRegistro()" class="btn btn-submit">
+                        <i class="fas fa-trash-alt me-2"></i>
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/" class="btn btn-submit">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variable global para almacenar la tabla actual
+        const tablaActual = '{{ config.tabla }}';
+        
+        // Mostrar/ocultar campos adicionales según la tabla
+        window.onload = function() {
+            const esLabores = tablaActual === 'Labores';
+            document.getElementById('jornadaNuevaGroup').style.display = esLabores ? 'block' : 'none';
+            document.getElementById('valorNuevoGroup').style.display = esLabores ? 'block' : 'none';
+            document.getElementById('jornadaModificarGroup').style.display = esLabores ? 'block' : 'none';
+            document.getElementById('valorModificarGroup').style.display = esLabores ? 'block' : 'none';
+            
+            // Inicializar formato de moneda para los campos de valor
+            if (esLabores) {
+                inicializarFormatoMoneda('valorNuevo');
+                inicializarFormatoMoneda('valorModificar');
+            }
+            
+            cargarRegistros();
+        };
+
+        // Función para inicializar el formato de moneda
+        function inicializarFormatoMoneda(elementId) {
+            document.getElementById(elementId).addEventListener('input', function(e) {
+                let value = this.value.replace(/[^\d]/g, '');
+                if (value) {
+                    value = parseInt(value);
+                    this.value = new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                    }).format(value);
+                }
+            });
+        }
+
+        // Función para obtener el valor numérico de un campo de moneda
+        function obtenerValorNumerico(valor) {
+            return parseInt(valor.replace(/[^\d]/g, '')) || 0;
+        }
+
+        // Función para cargar los registros en los selects
+        function cargarRegistros() {
+            fetch(`/obtener_registros?tabla=${tablaActual}`)
+            .then(response => response.json())
+            .then(data => {
+                const selectModificar = document.getElementById('selectModificar');
+                const selectEliminar = document.getElementById('selectEliminar');
+                
+                // Limpiar selects
+                selectModificar.innerHTML = '<option value="" selected disabled>Seleccione un registro</option>';
+                selectEliminar.innerHTML = '<option value="" selected disabled>Seleccione un registro</option>';
+                
+                // Ordenar los datos alfabéticamente
+                data.sort((a, b) => {
+                    const nombreA = a.nombre.toLowerCase();
+                    const nombreB = b.nombre.toLowerCase();
+                    return nombreA.localeCompare(nombreB);
+                });
+                
+                // Agregar opciones
+                data.forEach(registro => {
+                    const nombreMostrado = tablaActual === 'Labores' ? 
+                        `${registro.nombre} - ${registro.jornada}` : registro.nombre;
+                    
+                    // Guardar los datos completos del registro como un atributo data
+                    const optionModificar = document.createElement('option');
+                    optionModificar.value = registro.id;
+                    optionModificar.textContent = nombreMostrado;
+                    if (tablaActual === 'Labores') {
+                        optionModificar.dataset.nombre = registro.nombre;
+                        optionModificar.dataset.jornada = registro.jornada;
+                        optionModificar.dataset.valor = registro.valor;
+                    }
+                    selectModificar.appendChild(optionModificar);
+                    
+                    selectEliminar.innerHTML += `<option value="${registro.id}">${nombreMostrado}</option>`;
+                });
+
+                // Agregar evento change al select de modificar
+                if (tablaActual === 'Labores') {
+                    selectModificar.addEventListener('change', function() {
+                        const selectedOption = this.options[this.selectedIndex];
+                        document.getElementById('nombreModificar').value = selectedOption.dataset.nombre || '';
+                        document.getElementById('jornadaModificar').value = selectedOption.dataset.jornada || '';
+                        const valor = selectedOption.dataset.valor || '0';
+                        document.getElementById('valorModificar').value = new Intl.NumberFormat('es-CO', {
+                            style: 'currency',
+                            currency: 'COP',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }).format(valor);
+                    });
+                }
+            });
+        }
+
+        // Función para crear un nuevo registro
+        function crearRegistro() {
+            const nombre = document.getElementById('nombreNuevo').value;
+            if (!nombre) {
+                alert('Por favor ingrese un nombre');
+                return;
+            }
+
+            let data = {
+                nombre: nombre,
+                tabla: tablaActual
+            };
+
+            if (tablaActual === 'Labores') {
+                const jornada = document.getElementById('jornadaNueva').value;
+                const valor = obtenerValorNumerico(document.getElementById('valorNuevo').value);
+                
+                if (!jornada) {
+                    alert('Por favor seleccione una jornada');
+                    return;
+                }
+                
+                data.jornada = jornada;
+                data.valor = valor;
+            }
+
+            fetch('/crear_registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Registro creado exitosamente');
+                    document.getElementById('nombreNuevo').value = '';
+                    if (tablaActual === 'Labores') {
+                        document.getElementById('jornadaNueva').selectedIndex = 0;
+                        document.getElementById('valorNuevo').value = '';
+                    }
+                    cargarRegistros();
+                } else {
+                    alert(data.error || 'Error al crear el registro');
+                }
+            });
+        }
+
+        // Función para actualizar un registro
+        function actualizarRegistro() {
+            const id = document.getElementById('selectModificar').value;
+            const nuevoNombre = document.getElementById('nombreModificar').value;
+            
+            if (!id || !nuevoNombre) {
+                alert('Por favor seleccione un registro e ingrese el nuevo nombre');
+                return;
+            }
+
+            let data = {
+                id: id,
+                nombre: nuevoNombre,
+                tabla: tablaActual
+            };
+
+            if (tablaActual === 'Labores') {
+                const jornada = document.getElementById('jornadaModificar').value;
+                const valor = obtenerValorNumerico(document.getElementById('valorModificar').value);
+                
+                if (!jornada) {
+                    alert('Por favor seleccione una jornada');
+                    return;
+                }
+                
+                data.jornada = jornada;
+                data.valor = valor;
+            }
+
+            fetch('/actualizar_registro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Registro actualizado exitosamente');
+                    document.getElementById('nombreModificar').value = '';
+                    if (tablaActual === 'Labores') {
+                        document.getElementById('jornadaModificar').selectedIndex = 0;
+                        document.getElementById('valorModificar').value = '';
+                    }
+                    cargarRegistros();
+                } else {
+                    alert(data.error || 'Error al actualizar el registro');
+                }
+            });
+        }
+
+        // Función para eliminar un registro
+        function eliminarRegistro() {
+            const id = document.getElementById('selectEliminar').value;
+            
+            if (!id) {
+                alert('Por favor seleccione un registro');
+                return;
+            }
+
+            if (confirm('¿Está seguro de que desea eliminar este registro?')) {
+                fetch('/eliminar_registro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        id: id,
+                        tabla: tablaActual
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Registro eliminado exitosamente');
+                        cargarRegistros();
+                    } else {
+                        alert('Error al eliminar el registro');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html> 

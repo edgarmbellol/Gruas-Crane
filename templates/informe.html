@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generación de Informe - Grúas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #198754;
+            --hover-color: #157347;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            padding: 1rem 0;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: none;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit i {
+            margin-right: 0.5rem;
+        }
+
+        .resultado {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            border: 2px solid var(--primary-color);
+            display: none;
+        }
+
+        .resultado h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 0 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-label {
+                font-size: 1rem;
+            }
+
+            .btn-submit {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="header">
+                <i class="fas fa-file-alt"></i>
+                <h1>Generación de Informe</h1>
+            </div>
+
+            <form id="informeForm">
+                <div class="form-group">
+                    <label for="fechaInicio" class="form-label">Fecha de Inicio</label>
+                    <input type="date" class="form-control" id="fechaInicio" required>
+                    <i class="fas fa-calendar"></i>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaFin" class="form-label">Fecha de Fin</label>
+                    <input type="date" class="form-control" id="fechaFin" required>
+                    <i class="fas fa-calendar"></i>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-search me-2"></i>
+                        Generar Informe
+                    </button>
+                </div>
+            </form>
+
+            <div id="resultado" class="resultado">
+                <h3 class="text-center">Resumen de Pagos</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Colaborador</th>
+                                <th>Total a Pagar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaResultados">
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Total General</th>
+                                <th id="totalGeneral"></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div id="registrosDetallados" class="resultado mt-4">
+                <h3 class="text-center">Registros Detallados</h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Colaborador</th>
+                                <th>Cliente</th>
+                                <th>Labor</th>
+                                <th>Equipo</th>
+                                <th>Ubicación</th>
+                                <th>Jornada</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaRegistros">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button onclick="exportarRegistros()" class="btn btn-submit">
+                        <i class="fas fa-file-excel me-2"></i>
+                        Exportar a Excel
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="/" class="btn btn-submit">
+                    <i class="fas fa-arrow-left me-2"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Establecer fechas por defecto
+        window.onload = function() {
+            const hoy = new Date();
+            const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            
+            document.getElementById('fechaInicio').valueAsDate = inicioMes;
+            document.getElementById('fechaFin').valueAsDate = hoy;
+        };
+
+        // Formatear números como moneda colombiana
+        function formatearMoneda(valor) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(valor);
+        }
+
+        // Formatear fecha para mostrar
+        function formatearFecha(fecha) {
+            return new Date(fecha).toLocaleDateString('es-CO', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
+
+        // Función para exportar registros a Excel
+        function exportarRegistros() {
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+
+            window.location.href = `/exportar_registros?fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById('informeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+
+            if (new Date(fechaFin) < new Date(fechaInicio)) {
+                alert('La fecha de fin no puede ser anterior a la fecha de inicio');
+                return;
+            }
+
+            fetch('/generar_informe', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fecha_inicio: fechaInicio,
+                    fecha_fin: fechaFin
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const resultado = document.getElementById('resultado');
+                    const registrosDetallados = document.getElementById('registrosDetallados');
+                    const tablaResultados = document.getElementById('tablaResultados');
+                    const tablaRegistros = document.getElementById('tablaRegistros');
+                    const totalGeneral = document.getElementById('totalGeneral');
+                    
+                    // Limpiar tablas anteriores
+                    tablaResultados.innerHTML = '';
+                    tablaRegistros.innerHTML = '';
+                    
+                    // Calcular total general
+                    let total = 0;
+                    
+                    // Agregar filas a la tabla de resumen
+                    data.resultados.forEach(item => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                            <td>${item.colaborador}</td>
+                            <td>${formatearMoneda(item.total)}</td>
+                        `;
+                        tablaResultados.appendChild(fila);
+                        total += item.total;
+                    });
+                    
+                    // Mostrar total general
+                    totalGeneral.textContent = formatearMoneda(total);
+                    
+                    // Agregar filas a la tabla de registros detallados
+                    data.registros.forEach(registro => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                            <td>${formatearFecha(registro.fecha)}</td>
+                            <td>${registro.colaborador}</td>
+                            <td>${registro.cliente}</td>
+                            <td>${registro.labor}</td>
+                            <td>${registro.equipo}</td>
+                            <td>${registro.ubicacion}</td>
+                            <td>${registro.jornada}</td>
+                            <td>${formatearMoneda(registro.valor)}</td>
+                        `;
+                        tablaRegistros.appendChild(fila);
+                    });
+                    
+                    // Mostrar las secciones de resultados
+                    resultado.style.display = 'block';
+                    registrosDetallados.style.display = 'block';
+                } else {
+                    alert('Error al generar el informe');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
